@@ -1,49 +1,54 @@
 import { cn } from '../lib/utils';
-import { motion } from 'framer-motion';
 
-export const Key = ({ note, type, isActive, keyLabel, onPlay, onRelease, onMouseEnter }) => {
+export const Key = ({ note, type, isActive, keyLabel, onPlay, onRelease, isMouseDown }) => {
   const isBlack = type === 'black';
 
   return (
-    <motion.button
+    <button
       onMouseDown={() => onPlay(note)}
       onMouseUp={() => onRelease(note)}
       onMouseLeave={() => onRelease(note)}
-      onMouseEnter={() => onMouseEnter(note)}
-      onTouchStart={(e) => {
-        e.preventDefault(); // Prevent scrolling
-        onPlay(note);
-      }}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        onRelease(note);
-      }}
+      onMouseEnter={() => isMouseDown && onPlay(note)}
+      onTouchStart={(e) => { e.preventDefault(); onPlay(note); }}
+      onTouchEnd={(e) => { e.preventDefault(); onRelease(note); }}
       className={cn(
-        "relative rounded-b-md select-none transition-all duration-75 flex flex-col justify-end items-center pb-4",
-        isBlack 
-          ? "bg-piano-key-black text-white z-10 w-10 h-40 -mx-5 shadow-key-black" 
-          : "bg-piano-key-white text-zinc-600 z-0 w-16 h-64 shadow-key-white",
-        isActive && isBlack && "bg-piano-key-activeBlack h-[9.8rem] shadow-key-black-active shadow-glow z-20",
-        isActive && !isBlack && "bg-piano-key-activeWhite h-[15.8rem] shadow-key-white-active shadow-glow z-20"
+        'relative select-none outline-none transition-all duration-75 flex flex-col justify-end items-center',
+        isBlack
+          ? cn(
+              'z-10 -mx-[0.9rem] w-9 h-36 rounded-b-lg pb-3',
+              'bg-gradient-to-b from-zinc-700 to-zinc-900 border border-zinc-950 border-t-zinc-600',
+              'shadow-[0_6px_12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.08)]',
+              isActive
+                ? 'from-sky-700 to-sky-900 border-sky-800 shadow-[0_2px_6px_rgba(0,0,0,0.8),0_0_12px_rgba(14,165,233,0.5),inset_0_2px_4px_rgba(0,0,0,0.4)] translate-y-0.5'
+                : 'hover:from-zinc-600 hover:to-zinc-800'
+            )
+          : cn(
+              'z-0 w-14 h-56 rounded-b-xl pb-4 border border-zinc-300/20',
+              'bg-gradient-to-b from-zinc-50 to-zinc-200',
+              'shadow-[0_4px_8px_rgba(0,0,0,0.4),inset_0_-2px_4px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.9)]',
+              isActive
+                ? 'from-sky-100 to-sky-200 border-sky-300/40 shadow-[0_1px_4px_rgba(0,0,0,0.3),0_0_16px_rgba(14,165,233,0.35),inset_0_2px_4px_rgba(14,165,233,0.2)] translate-y-0.5'
+                : 'hover:from-white hover:to-zinc-100'
+            )
       )}
-      style={isBlack ? { marginLeft: '-1.25rem', marginRight: '-1.25rem' } : {}}
-      whileTap={!isActive ? { scale: 0.98 } : {}}
     >
-      <div className={cn(
-        "font-semibold text-xs tracking-widest pointer-events-none transition-opacity",
-        isActive ? "opacity-100" : "opacity-40",
-        isBlack ? "text-zinc-300" : "text-zinc-400"
+      <span className={cn(
+        'text-[10px] font-bold tracking-widest pointer-events-none transition-opacity',
+        isBlack
+          ? cn('text-zinc-400', isActive && 'text-sky-300 opacity-100')
+          : cn('text-zinc-400', isActive && 'text-sky-500 opacity-100'),
+        !isActive && 'opacity-50'
       )}>
         {keyLabel}
-      </div>
+      </span>
       {!isBlack && (
-        <div className={cn(
-          "text-[10px] pointer-events-none mt-1 opacity-20",
-          isActive && "opacity-60 text-piano-accent"
+        <span className={cn(
+          'text-[9px] pointer-events-none mt-0.5 transition-opacity opacity-20',
+          isActive && 'opacity-50 text-sky-500'
         )}>
           {note}
-        </div>
+        </span>
       )}
-    </motion.button>
+    </button>
   );
 };
