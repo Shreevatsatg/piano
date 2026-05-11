@@ -1,16 +1,42 @@
-# React + Vite
+# Virtuoso — Virtual Piano
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A browser-based virtual piano built with React and Vite. Play notes via keyboard or mouse, listen to built-in songs, or use Guide Mode to learn them step by step.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Free Play** — click keys or use your keyboard to play notes
+- **Auto-Play** — listen to a song played automatically
+- **Guide Mode** — follow along note-by-note; the next key is highlighted as you progress
+- **Volume control** — slider with mute toggle
+- **5 built-in songs** — Ode to Joy, Twinkle Twinkle, Happy Birthday, Für Elise, Jingle Bells
 
-## React Compiler
+## Keyboard Mapping
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| White keys | `A` `S` `D` `F` `G` `H` `J` `K` `L` |
+|------------|---------------------------------------|
+| Black keys | `W` `E` `T` `Y` `U` `O` `P`          |
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19, Vite 8
+- Tone.js (audio synthesis)
+- Tailwind CSS v4
+- Lucide React (icons)
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
