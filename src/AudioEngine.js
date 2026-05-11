@@ -9,17 +9,21 @@ class AudioEngine {
 
   async initialize() {
     if (this.isInitialized) return;
-    // Minimize audio latency
-    Tone.getContext().lookAhead = 0;
-    Tone.getContext().latencyHint = 'interactive';
-    await Tone.start();
+    if (this._initPromise) return this._initPromise;
 
-    this.volume = new Tone.Volume(-6).toDestination();
-    this.reverb = new Tone.Reverb({ decay: 1.8, preDelay: 0.01, wet: 0.18 }).connect(this.volume);
-    await this.reverb.ready;
+    this._initPromise = (async () => {
+      await Tone.start();
+      Tone.getContext().lookAhead = 0;
 
-    this.setupSynth(this.currentSynthType);
-    this.isInitialized = true;
+      this.volume = new Tone.Volume(-6).toDestination();
+      this.reverb = new Tone.Reverb({ decay: 1.8, preDelay: 0.01, wet: 0.18 }).connect(this.volume);
+      await this.reverb.ready;
+
+      this.setupSynth(this.currentSynthType);
+      this.isInitialized = true;
+    })();
+
+    return this._initPromise;
   }
 
   setupSynth(type) {

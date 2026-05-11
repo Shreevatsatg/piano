@@ -28,23 +28,21 @@ export const Piano = () => {
     setStarted(true);
   }, []);
 
-  const playNote = useCallback((note) => {
-    initAudio();
-    setActiveNotes((prev) => {
-      if (prev.has(note)) return prev;
-      audioEngine.playNote(note);
-      return new Set([...prev, note]);
-    });
+  const activeNotesRef = useRef(new Set());
+
+  const playNote = useCallback(async (note) => {
+    if (activeNotesRef.current.has(note)) return;
+    await initAudio();
+    activeNotesRef.current.add(note);
+    audioEngine.playNote(note);
+    setActiveNotes(new Set(activeNotesRef.current));
   }, [initAudio]);
 
   const releaseNote = useCallback((note) => {
-    setActiveNotes((prev) => {
-      if (!prev.has(note)) return prev;
-      audioEngine.releaseNote(note);
-      const next = new Set(prev);
-      next.delete(note);
-      return next;
-    });
+    if (!activeNotesRef.current.has(note)) return;
+    activeNotesRef.current.delete(note);
+    audioEngine.releaseNote(note);
+    setActiveNotes(new Set(activeNotesRef.current));
   }, []);
 
   useEffect(() => {
