@@ -2,9 +2,11 @@ import * as Tone from 'tone';
 
 class AudioEngine {
   constructor() {
-    this.synth = null;
+    this.sampler = null;
+    this.volume = null;
+    this.reverb = null;
     this.isInitialized = false;
-    this.currentSynthType = 'poly';
+    this._initPromise = null;
   }
 
   async initialize() {
@@ -16,61 +18,53 @@ class AudioEngine {
       Tone.getContext().lookAhead = 0;
 
       this.volume = new Tone.Volume(-6).toDestination();
-      this.reverb = new Tone.Reverb({ decay: 1.8, preDelay: 0.01, wet: 0.18 }).connect(this.volume);
+      this.reverb = new Tone.Reverb({ decay: 2.5, preDelay: 0.01, wet: 0.22 }).connect(this.volume);
       await this.reverb.ready;
 
-      this.setupSynth(this.currentSynthType);
+      await new Promise((resolve) => {
+        this.sampler = new Tone.Sampler({
+          urls: {
+            C4: 'C4.mp3', 'D#4': 'Ds4.mp3', 'F#4': 'Fs4.mp3', A4: 'A4.mp3',
+            C5: 'C5.mp3', 'D#5': 'Ds5.mp3', 'F#5': 'Fs5.mp3', A5: 'A5.mp3',
+          },
+          baseUrl: 'https://tonejs.github.io/audio/salamander/',
+          onload: resolve,
+          onerror: () => {
+            // fallback to synth if samples fail to load
+            this.sampler = new Tone.PolySynth(Tone.Synth, {
+              oscillator: { type: 'triangle8' },
+              envelope: { attack: 0.006, decay: 0.8, sustain: 0.1, release: 2.5 },
+            });
+            resolve();
+          },
+        }).connect(this.reverb);
+      });
+
       this.isInitialized = true;
     })();
 
     return this._initPromise;
   }
 
-  setupSynth(type) {
-    if (this.synth) this.synth.dispose();
-
-    const dest = this.reverb ?? Tone.getDestination();
-
-    const envelope = { attack: 0.005, decay: 0.1, sustain: 0.4, release: 0.8 };
-
-    switch (type) {
-      case 'am':
-        this.synth = new Tone.PolySynth(Tone.AMSynth, { envelope }).connect(dest);
-        break;
-      case 'fm':
-        this.synth = new Tone.PolySynth(Tone.FMSynth, { envelope }).connect(dest);
-        break;
-      case 'duo':
-        this.synth = new Tone.PolySynth(Tone.DuoSynth).connect(dest);
-        break;
-      default:
-        this.synth = new Tone.PolySynth(Tone.Synth, {
-          oscillator: { type: 'triangle' },
-          envelope,
-        }).connect(dest);
-    }
-    this.synth.volume.value = -6;
-  }
-
-  setSynthType(type) {
-    this.currentSynthType = type;
-    if (this.isInitialized) this.setupSynth(type);
-  }
-
-  // value: 0–1 mapped to -40dB–0dB (perceptual log curve)
   setVolume(value) {
     if (!this.volume) return;
     this.volume.volume.value = value === 0 ? -Infinity : -40 + value * 40;
   }
 
   playNote(note) {
-    if (!this.isInitialized || !this.synth) return;
-    this.synth.triggerAttack(note, Tone.now());
+    if (!this.isInitialized || !this.sampler) return;
+    this.sampler.triggerAttack(note, Tone.now());
   }
 
   releaseNote(note) {
-    if (!this.isInitialized || !this.synth) return;
-    this.synth.triggerRelease(note, Tone.now());
+    if (!this.isInitialized || !this.sampler) return;
+    this.sampler.triggerRelease(note, Tone.now());
+  }
+
+  // For auto-play: schedule a full note with duration
+  scheduleNote(note, time, duration = '8n') {
+    if (!this.isInitialized || !this.sampler) return;
+    this.sampler.triggerAttackRelease(note, duration, time);
   }
 }
 
