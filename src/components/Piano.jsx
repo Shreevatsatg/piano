@@ -144,7 +144,7 @@ export const Piano = () => {
   const guideNote = mode === 'guide' && selectedSong ? selectedSong.steps[guideStep]?.note : null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 w-full relative">
+    <main className="flex flex-col items-center justify-center min-h-screen py-8 px-4 w-full relative">
 
       {/* Background glows */}
       <div className="fixed inset-0 pointer-events-none">
@@ -155,7 +155,7 @@ export const Piano = () => {
       <div className="relative z-10 flex flex-col gap-5 w-full max-w-[1100px]">
 
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-7 py-4 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl">
+        <header className="flex items-center justify-between px-7 py-4 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="w-3 h-3 rounded-full bg-sky-400" />
@@ -163,7 +163,7 @@ export const Piano = () => {
             </div>
             <div>
               <h1 className="text-lg font-bold tracking-[0.2em] text-white uppercase">piano</h1>
-              <p className="text-[10px] text-zinc-500 tracking-widest uppercase">Virtual Piano</p>
+              <h2 className="text-[10px] text-zinc-500 tracking-widest uppercase">Virtual Piano</h2>
             </div>
           </div>
 
@@ -184,10 +184,10 @@ export const Piano = () => {
               <span className="text-xs font-mono text-zinc-400 w-9 text-right">{Math.round(volume * 100)}%</span>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* ── Songs Panel (collapsible) ── */}
-        <div className="rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl">
+        <section className="rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl" aria-label="Song Library">
 
           {/* Accordion trigger */}
           <button
@@ -298,10 +298,10 @@ export const Piano = () => {
               })}
             </div>
           </div>
-        </div>
+        </section>
 
         {/* ── Piano body ── */}
-        <div className="rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl">
+        <section className="rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/5 shadow-2xl" aria-label="Interactive Piano">
           {/* Piano top rail */}
           <div className="px-8 pt-5 pb-3 flex items-center justify-between border-b border-white/5">
             <div className="flex gap-1.5">
@@ -351,9 +351,9 @@ export const Piano = () => {
               A · S · D · F · G · H · J · K · L &nbsp;|&nbsp; W · E · T · Y · U · O · P
             </p>
           </div>
-        </div>
+        </section>
 
       </div>
-    </div>
+    </main>
   );
 };

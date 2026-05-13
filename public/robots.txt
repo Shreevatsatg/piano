@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://piano.shreevatsatg.com/sitemap.xml
