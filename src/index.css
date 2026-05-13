@@ -26,6 +26,26 @@
   }
 }
 
+/* Responsive scaling for mobile landscape */
+@media (max-height: 600px) and (orientation: landscape) {
+  .mobile-scale-container {
+    transform: scale(0.85);
+    transform-origin: center center;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-scale-container {
+    transform: scale(0.7);
+    transform-origin: center center;
+  }
+}
+@media (max-height: 400px) and (orientation: landscape) {
+  .mobile-scale-container {
+    transform: scale(0.55);
+    transform-origin: center center;
+  }
+}
+
 /* Songs accordion */
 .songs-panel {
   max-height: 0;
