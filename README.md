@@ -1,4 +1,4 @@
-# Virtuoso — Virtual Piano
+#  Virtual Piano
 
 A browser-based virtual piano built with React and Vite. Play notes via keyboard or mouse, listen to built-in songs, or use Guide Mode to learn them step by step.
 

@@ -162,7 +162,7 @@ export const Piano = () => {
               <div className="absolute inset-0 w-3 h-3 rounded-full bg-sky-400 animate-ping opacity-40" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-[0.2em] text-white uppercase">Virtuoso</h1>
+              <h1 className="text-lg font-bold tracking-[0.2em] text-white uppercase">piano</h1>
               <p className="text-[10px] text-zinc-500 tracking-widest uppercase">Virtual Piano</p>
             </div>
           </div>
